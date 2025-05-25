@@ -32,40 +32,6 @@ def get_tournament_data_for_team(tournament_id, team_id) -> dict:
     return {}  # return None if team not found
 
 
-# makes a plot of results by tour
-def show_results_by_tour(tournament_data: dict, team_data: dict) -> None:
-    # error handling
-    if not tournament_data or not team_data:
-        print("Error: Missing tournament or team data")
-        return
-
-    results_by_tour = []
-    tours = tournament_data['questionQty'].keys()
-    max_questions = max(tournament_data['questionQty'].values())
-
-    # counting answered questions for each tour
-    for tour in tours:
-        tour_questions = tournament_data['questionQty'][tour]
-        start_idx = (int(tour) - 1) * tour_questions
-        end_idx = start_idx + tour_questions
-        results = team_data['mask'][start_idx:end_idx]
-        correct = results.count('1')
-        results_by_tour.append(correct)
-
-    plt.figure(figsize=(10, 5))
-    plt.plot(tours, results_by_tour, marker='o', linestyle='-', color='b')
-
-    # format the plot
-    plt.ylim(bottom=1, top=max_questions)
-    plt.yticks(np.arange(0, max_questions + 1, step=1))
-
-    plt.title(f"Взятые по турам - {team_data['team']['name']} на турнире {tournament_data['name']}")
-    plt.xlabel("номер тура")
-    plt.ylabel("взято")
-    plt.grid(True)
-    plt.show()
-
-
 def show_relative_results_by_tour(tournament_results: dict, team_data: dict, tournament_tours_q: dict, tournament_name: str) -> None:
     # error handling
     if not tournament_results or not team_data:

@@ -124,7 +124,7 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict, tou
 
     # format the plot
     plt.ylim(bottom=1, top=max_questions)
-    plt.yticks(np.arange(0, max_questions + 1, step=1))
+    plt.yticks(np.arange(-5, max_questions + 1, step=1))
 
     plt.title(f"Взятые по турам - {team_data['team']['name']} - {tournament_name}")
     plt.xlabel("номер тура")

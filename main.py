@@ -109,14 +109,14 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict, tou
                  bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
 
     for i, (x, y) in enumerate(zip(tours, results_by_tour)):
-        plt.text(x, y + 0.2, str(y),  # x, y+offset, text
+        plt.text(x, y + 0.2, str(round(y, 2)),  # x, y+offset, text
                  ha='center',  # horizontal alignment
                  va='bottom',  # vertical alignment
                  fontsize=10,
                  bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
 
     for i, (x, y) in enumerate(zip(tours, diffs)):
-        plt.text(x, y + 0.2, f'+{str(round(y, 2))}' if y >= 0 else f'-{str(y)}',  # x, y+offset, text
+        plt.text(x, y + 0.2, f'+{str(round(y, 2))}' if y >= 0 else f'-{str(round(y, 2))}',  # x, y+offset, text
                  ha='center',  # horizontal alignment
                  va='bottom',  # vertical alignment
                  fontsize=10,

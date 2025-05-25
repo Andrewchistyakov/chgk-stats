@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt # type: ignore
 import numpy as np # type: ignore
 import argparse
 
-def get_tournament_data(tournament_id):
+def get_tournament_data(tournament_id) -> dict:
     url = f"https://api.rating.chgk.info/tournaments/{tournament_id}.json?includeMasksAndControversials=1"
     response = requests.get(url)
     return response.json()
 
 # getting tournament results for ypur team
-def get_tournament_data_for_team(tournament_id, team_id):
+def get_tournament_data_for_team(tournament_id, team_id) -> dict:
     url = f"https://api.rating.chgk.info/tournaments/{tournament_id}/results.json?includeMasksAndControversials=1"
     response = requests.get(url)
     # Make sure the response is successful and parse JSON
@@ -24,7 +24,7 @@ def get_tournament_data_for_team(tournament_id, team_id):
     return None  # return None if team not found
 
 # makes a plot of results by tour 
-def show_results_by_tour(tournament_data, team_data):
+def show_results_by_tour(tournament_data: dict, team_data: dict) -> None:
     if not tournament_data or not team_data:
         print("Error: Missing tournament or team data")
         return

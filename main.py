@@ -136,8 +136,8 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict, tou
 
 def main():
     parser = argparse.ArgumentParser(description="Анализ результатов турнира")
-    parser.add_argument("tournament_id", help="tournament ID")
-    parser.add_argument("team_id", help="team ID")
+    parser.add_argument("-to","--tournament_id", help="tournament ID")
+    parser.add_argument("-te", "--team_id", help="team ID")
     args = parser.parse_args()
     show_relative_results_by_tour(get_tournament_results(args.tournament_id),
                                   get_tournament_data_for_team(args.tournament_id, args.team_id),

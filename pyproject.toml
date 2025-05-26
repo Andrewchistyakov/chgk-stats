@@ -8,5 +8,6 @@ dependencies = [
     "requests",
     "matplotlib",
     "numpy",
-    "argparse"
+    "argparse",
+    "datetime"
 ]

@@ -32,7 +32,7 @@ pip install -r requirements.txt
 Пример запуска:
 
 ```bash
-python main.py ---tournament_id <ID_ТУРНИРА> --team_id <ID_КОМАНДЫ>
+python stats_by_tour.py ---tournament_id <ID_ТУРНИРА> --team_id <ID_КОМАНДЫ>
 ```
 > сокращенные версии аргументов:
 > `--tournament_id` = `-to`

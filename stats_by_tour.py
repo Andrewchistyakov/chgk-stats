@@ -32,7 +32,9 @@ def get_tournament_data_for_team(tournament_id, team_id) -> dict:
     return {}  # return None if team not found
 
 
-def show_relative_results_by_tour(tournament_results: dict, team_data: dict, tournament_tours_q: dict, tournament_name: str) -> None:
+def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
+                                  tournament_tours_q: dict,
+                                  tournament_name: str) -> None:
     # error handling
     if not tournament_results or not team_data:
         print("tournament results or team data or tours amount not found while counting avg by tour")

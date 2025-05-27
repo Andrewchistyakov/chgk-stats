@@ -104,7 +104,7 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
     avg_values = []
     for i, (x, y) in enumerate(zip(tours, avg_by_tour)):
         avg_values.append(y)
-        plt.text(x, y + 0.2, str(y),  # x, y+offset, text
+        plt.text(x, y + 0.2, str(round(y, 2)),  # x, y+offset, text
                  ha='center',  # horizontal alignment
                  va='bottom',  # vertical alignment
                  fontsize=10,

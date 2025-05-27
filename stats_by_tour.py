@@ -35,7 +35,8 @@ def get_tournament_data_for_team(tournament_id, team_id) -> dict:
 
 def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
                                   tournament_tours_q: dict,
-                                  tournament_name: str) -> None:
+                                  tournament_name: str,
+                                  exclude: list) -> None:
     # error handling
     if not tournament_results or not team_data:
         print("tournament results or team data or tours amount not found while counting avg by tour")
@@ -89,40 +90,48 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
     plt.figure(figsize=(10, 5))
 
     # plot of user's team results
-    plt.plot(tours, results_by_tour, marker='o', linestyle='-', color='r', label='результат команды')
+    if 'team' not in exclude:
+        plt.plot(tours, results_by_tour, marker='o', linestyle='-', color='r', label='результат команды')
+
+        # showing numbers near markers
+        for i, (x, y) in enumerate(zip(tours, results_by_tour)):
+            plt.text(x, y + 0.2, str(round(y, 2)),  # x, y+offset, text
+                 ha='center',  # horizontal alignment
+                 va='bottom',  # vertical alignment
+                 fontsize=10,
+                 bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
+    
 
     # plot of avg results
-    plt.plot(tours, avg_by_tour, marker='o', linestyle=':', color='b', label='средний результат на турнире')
+    if 'avg' not in exclude:
+        plt.plot(tours, avg_by_tour, marker='o', linestyle=':', color='b', label='средний результат на турнире')
+
+        # showing numbers near markers
+        for i, (x, y) in enumerate(zip(tours, avg_by_tour)):
+            plt.text(x, y + 0.2, str(round(y, 2)),  # x, y+offset, text
+                 ha='center',  # horizontal alignment
+                 va='bottom',  # vertical alignment
+                 fontsize=10,
+                 bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
+
     # plot of differences
     diffs = [results_by_tour[i] - avg_by_tour[i] for i in range(len(avg_by_tour))]
+    if 'diff' not in exclude:
+        plt.plot(tours, diffs, marker='o', linestyle='-.', color='g', label='выигрыш команды относительно среднего')
+
+        # showing numbers near markers
+        for i, (x, y) in enumerate(zip(tours, diffs)):
+            plt.text(x, y + 0.2, f'+{str(round(y, 2))}' if y >= 0 else f'-{str(round(y, 2))}',  # x, y+offset, text
+                 ha='center',  # horizontal alignment
+                 va='bottom',  # vertical alignment
+                 fontsize=10,
+                 bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
+
+    # some useful logs for user    
     print(f'Средний выигрыш команды относительно среднего: {round(sum(diffs) / len(diffs), 3)}')
     print(f'Лучший тур: {diffs.index(max(diffs)) + 1}')
     print(f'Худший тур: {diffs.index(min(diffs)) + 1}')
-    plt.plot(tours, diffs, marker='o', linestyle='-.', color='g', label='выигрыш команды относительно среднего')
 
-    # add value labels near each marker
-    avg_values = []
-    for i, (x, y) in enumerate(zip(tours, avg_by_tour)):
-        avg_values.append(y)
-        plt.text(x, y + 0.2, str(round(y, 2)),  # x, y+offset, text
-                 ha='center',  # horizontal alignment
-                 va='bottom',  # vertical alignment
-                 fontsize=10,
-                 bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
-
-    for i, (x, y) in enumerate(zip(tours, results_by_tour)):
-        plt.text(x, y + 0.2, str(round(y, 2)),  # x, y+offset, text
-                 ha='center',  # horizontal alignment
-                 va='bottom',  # vertical alignment
-                 fontsize=10,
-                 bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
-
-    for i, (x, y) in enumerate(zip(tours, diffs)):
-        plt.text(x, y + 0.2, f'+{str(round(y, 2))}' if y >= 0 else f'-{str(round(y, 2))}',  # x, y+offset, text
-                 ha='center',  # horizontal alignment
-                 va='bottom',  # vertical alignment
-                 fontsize=10,
-                 bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=1))
 
     # format the plot
     plt.ylim(bottom=1, top=max_questions)
@@ -140,11 +149,13 @@ def main():
     parser = argparse.ArgumentParser(description="Анализ результатов турнира")
     parser.add_argument("-to","--tournament_id", help="tournament ID")
     parser.add_argument("-te", "--team_id", help="team ID")
+    parser.add_argument("-ex", "--exclude", help="какие данные не показывать на графике: 'avg' - средний результат, 'diff' - выигрыш относительно среднего, 'team' - результат команды \n несколько аргументов вводятся через пробел в кавычках!!!", default='')
     args = parser.parse_args()
     show_relative_results_by_tour(get_tournament_results(args.tournament_id),
                                   get_tournament_data_for_team(args.tournament_id, args.team_id),
                                   get_tournament_data(args.tournament_id)['questionQty'],
-                                  get_tournament_data(args.tournament_id)['name'])
+                                  get_tournament_data(args.tournament_id)['name'],
+                                  args.exclude.split(' '))
 
 
 if __name__ == "__main__":

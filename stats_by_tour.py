@@ -2,6 +2,7 @@ import requests
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np  # type: ignore
 import argparse
+import math
 
 
 def get_tournament_data(tournament_id) -> dict:
@@ -42,7 +43,6 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
 
     # array of 1s
     sum_by_tour = np.zeros(len(tournament_tours_q))
-    print(sum_by_tour)
 
     # getting results of each team
     for team in tournament_results:
@@ -59,12 +59,10 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
             correct = results.count('1')
             results_by_tour.append(correct)
 
-        print(results_by_tour)
         # updating avg score
         for i in range(len(results_by_tour)):
             sum_by_tour[i] += results_by_tour[i]
 
-        print(sum_by_tour)
 
     team_amount = len(tournament_results)
 
@@ -72,7 +70,6 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
     for i in range(len(sum_by_tour)):
         avg_by_tour[i] = sum_by_tour[i] / team_amount
 
-    print(avg_by_tour)
 
     # counting user's team results
     results_by_tour = []
@@ -98,6 +95,9 @@ def show_relative_results_by_tour(tournament_results: dict, team_data: dict,
     plt.plot(tours, avg_by_tour, marker='o', linestyle=':', color='b', label='средний результат на турнире')
     # plot of differences
     diffs = [results_by_tour[i] - avg_by_tour[i] for i in range(len(avg_by_tour))]
+    print(f'Средний выигрыш команды относительно среднего: {round(sum(diffs) / len(diffs), 3)}')
+    print(f'Лучший тур: {diffs.index(max(diffs)) + 1}')
+    print(f'Худший тур: {diffs.index(min(diffs)) + 1}')
     plt.plot(tours, diffs, marker='o', linestyle='-.', color='g', label='выигрыш команды относительно среднего')
 
     # add value labels near each marker
